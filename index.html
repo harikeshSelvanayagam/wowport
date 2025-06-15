@@ -159,16 +159,11 @@
         #toon {
             height: 5rem; /* Consistent avatar size */
             width: auto;
-            animation: climb-bob 0.8s infinite ease-in-out; /* Apply bobbing animation */
+            /* Animation for bobbing is now managed by GSAP's onUpdate for smooth integration */
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)); /* Add shadow to avatar */
             transform-origin: center center; /* Ensure rotation is from the center */
         }
 
-        @keyframes climb-bob {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-5px) rotate(2deg); } /* Subtle up and tilt */
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
 
         /* Specific text color adjustments for dark mode */
         .dark .text-gray-900,
@@ -509,27 +504,29 @@
             const navHeight = navElement ? navElement.offsetHeight : 64; // Default nav height if element not found
 
             // Initial positioning of the rope and avatar below the navbar
-            // These elements are fixed, so their 'top' property sets their initial vertical offset
             const initialTopOffset = navHeight + 10; // 10px buffer below the nav
             document.querySelector('.rope-visual-gsap').style.top = `${initialTopOffset}px`;
             climbRope.style.top = `${initialTopOffset}px`;
 
-
             gsap.to(climbRope, {
                 scrollTrigger: {
                     trigger: "body",
-                    start: "top top", // When the top of the body hits the top of the viewport
-                    end: "bottom bottom", // When the bottom of the body hits the bottom of the viewport
-                    scrub: 1, // Smoothly scrubs the animation with scroll
+                    start: "top top",
+                    end: "bottom bottom",
+                    scrub: 1,
                 },
                 // Animate 'y' (transformY) to make the avatar move down the entire scrollable height
-                // The amount to travel is the total scrollable height of the document
-                y: () => document.documentElement.scrollHeight - window.innerHeight - initialTopOffset - (climbRope.offsetHeight),
-                // Subtract initialTopOffset because the 'y' is relative to its starting 'top'
-                // and subtract climbRope.offsetHeight to ensure it ends at the bottom edge of the viewport
+                // The amount to travel is calculated so that the avatar ends near the bottom of the viewport.
+                y: () => {
+                    const totalScrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    // Calculate the target Y relative to its starting point (initialTopOffset)
+                    // The avatar should move from its starting top position to window.innerHeight - toon.offsetHeight - 10px from the viewport bottom.
+                    const finalYPositionInViewport = window.innerHeight - toon.offsetHeight - 10;
+                    return finalYPositionInViewport - initialTopOffset;
+                },
             });
 
-            // Subtle rotation for the 'climbing' effect
+            // Subtle rotation for the 'climbing' effect and 90-degree rotation at the end
             ScrollTrigger.create({
                 trigger: "body",
                 start: "top top",
@@ -538,7 +535,14 @@
                 onUpdate: self => {
                     const progress = self.progress;
                     // Apply a sine wave rotation for a subtle swinging/climbing motion
-                    toon.style.transform = `rotate(${Math.sin(progress * 15) * 4}deg)`; // Increased frequency and amplitude slightly
+                    const bobRotation = Math.sin(progress * 15) * 4; // Max 4 degrees rotation
+
+                    // Check if at the very end of the scroll (e.g., progress is very close to 1)
+                    if (progress > 0.99) { // Using 0.99 for "very near end"
+                        gsap.set(toon, { rotation: 90 }); // Rotate 90 degrees at the end
+                    } else {
+                        gsap.set(toon, { rotation: bobRotation }); // Apply bobbing
+                    }
                 }
             });
 
