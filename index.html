@@ -12,6 +12,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
     <!-- Lucide Icons CDN for sleek icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- GSAP and ScrollTrigger CDNs for smooth animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <style>
         /* Bright Mode Variables */
         :root {
@@ -31,6 +34,7 @@
             --hero-contact-gradient-mid: #4f46e5;   /* Indigo-600 */
             --hero-contact-gradient-end: #8b5cf6;   /* Violet-500 */
             --navbar-border: #cbd5e1; /* Gray-300 for navbar border in bright mode */
+            --rope-color: #a07a5f; /* Brown for rope in bright mode */
         }
 
         /* Dark Mode Variables */
@@ -51,6 +55,7 @@
             --hero-contact-gradient-mid: #2d004e;   /* Darker purple */
             --hero-contact-gradient-end: #4a006c;   /* Even darker purple */
             --navbar-border: #4a006c; /* Dark purple for navbar border in dark mode */
+            --rope-color: #6a4a2f; /* Darker brown for rope in dark mode */
         }
 
         body {
@@ -129,90 +134,73 @@
             transform: scale(1);
         }
 
-        /* Avatar climbing animation */
+        /* Rope styles (for GSAP version) */
+        .rope-visual-gsap {
+            position: fixed;
+            left: 2rem; /* Consistent left positioning */
+            top: 0; /* Will be adjusted by JS */
+            width: 4px;
+            height: 100vh; /* Rope spans viewport height */
+            background: var(--rope-color); /* Use variable for rope color */
+            border-radius: 2px;
+            box-shadow: inset 0 0 3px rgba(0,0,0,0.3);
+            z-index: 998; /* Below avatar */
+            transition: background-color 0.3s ease;
+        }
+
+        /* Toon (Avatar) container styles (for GSAP version) */
+        #climbRope {
+            position: fixed;
+            left: 2rem; /* Aligns with the rope */
+            top: 0; /* Will be adjusted by JS */
+            transform: translateX(-50%); /* Center the avatar on the rope */
+            z-index: 999; /* Above the rope */
+        }
+        #toon {
+            height: 5rem; /* Consistent avatar size */
+            width: auto;
+            animation: climb-bob 0.8s infinite ease-in-out; /* Apply bobbing animation */
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)); /* Add shadow to avatar */
+            transform-origin: center center; /* Ensure rotation is from the center */
+        }
+
         @keyframes climb-bob {
             0% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-5px) rotate(2deg); } /* Subtle up and tilt */
             100% { transform: translateY(0px) rotate(0deg); }
         }
 
-        #climbing-avatar {
-            animation: climb-bob 0.8s infinite ease-in-out; /* Apply bobbing animation */
-            transition: transform 0.05s linear; /* Smooth vertical movement with scroll */
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)); /* Add shadow to avatar */
-            height: 5rem; /* Consistent size */
-            width: auto; /* Maintain aspect ratio */
-            transform-origin: center center; /* Ensure rotation is from the center */
-        }
-
-        /* Rope styles */
-        #rope-container {
-            position: fixed;
-            top: 0;
-            left: 2rem; /* Position the rope on the left */
-            width: 1rem; /* Width of the rope itself */
-            height: 100vh;
-            z-index: 49; /* Below navbar, above content */
-            pointer-events: none; /* Allows clicks to pass through */
-        }
-
-        .rope-visual {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px; /* Thin line for the rope */
-            height: 100%;
-            background: linear-gradient(to bottom, #7a5230, #a07a5f, #7a5230); /* Rope texture */
-            border-radius: 2px;
-            box-shadow: inset 0 0 3px rgba(0,0,0,0.3);
-        }
-
         /* Specific text color adjustments for dark mode */
-        /* These ensure vibrant text colors against the dark background */
         .dark .text-gray-900,
         .dark .text-gray-700,
         .dark .text-gray-600,
         .dark .text-gray-200,
         .dark .text-gray-300 {
-            color: var(--site-text); /* Use general site text for paragraphs and generic text */
+            color: var(--site-text);
         }
 
-        .dark .text-blue-700 { /* Skill heading 1 */
-            color: #4dc0b5; /* Teal for a neon effect */
-        }
-        .dark .text-green-700 { /* Skill heading 2 */
-            color: #a0aec0; /* Light gray-blue for contrast */
-        }
-        .dark .text-purple-700 { /* Skill heading 3 */
-            color: #f6ad55; /* Orange for a warm glow */
-        }
-        .dark .text-indigo-700 { /* Main headings */
-            color: #667eea; /* Lighter indigo for a subtle glow */
-        }
-        .dark .text-blue-800 { /* Project titles */
-            color: #63b3ed; /* Sky blue for a clean look */
-        }
-        .dark .text-indigo-600 { /* Links and call to actions */
-            color: #9f7aea; /* Purple for consistency */
-        }
+        .dark .text-blue-700 { color: #4dc0b5; }
+        .dark .text-green-700 { color: #a0aec0; }
+        .dark .text-purple-700 { color: #f6ad55; }
+        .dark .text-indigo-700 { color: #667eea; }
+        .dark .text-blue-800 { color: #63b3ed; }
+        .dark .text-indigo-600 { color: #9f7aea; }
 
         /* Badge colors in dark mode */
         .dark .bg-blue-100 { background-color: #3182ce; }
         .dark .text-blue-800 { color: #e0f2f7; }
         .dark .bg-green-100 { background-color: #38a169; }
         .dark .text-green-800 { color: #e6fffa; }
-        .dark .bg-purple-100 { background-color: #805ad5; } /* New dark purple badge */
-        .dark .text-purple-800 { color: #ede9fe; } /* New dark purple badge text */
+        .dark .bg-purple-100 { background-color: #805ad5; }
+        .dark .text-purple-800 { color: #ede9fe; }
     </style>
 </head>
 <body class="text-gray-800">
 
-    <!-- Rope Container and Climbing Avatar -->
-    <div id="rope-container">
-        <div class="rope-visual"></div>
-        <img id="climbing-avatar" src="images/avatar.png" alt="AI Companion Avatar Climbing"
-             class="absolute left-1/2 -translate-x-1/2" style="top: 0;"
+    <!-- Rope and Climbing Avatar (GSAP controlled) -->
+    <div class="rope-visual-gsap"></div>
+    <div id="climbRope">
+        <img id="toon" src="images/avatar.png" alt="Climbing Toon"
              onerror="this.onerror=null;this.src='https://placehold.co/80x80/6366f1/ffffff?text=AI';">
     </div>
 
@@ -512,32 +500,48 @@
         document.addEventListener('DOMContentLoaded', () => {
             typeWriter(); // Start typewriter effect
 
-            // Climbing Avatar Vertical Movement with Scroll
-            const climbingAvatar = document.getElementById('climbing-avatar');
-            // Safely get the nav element, provide a default height if not found (e.g., 64px for a typical header)
+            // GSAP ScrollTrigger setup for climbing avatar
+            gsap.registerPlugin(ScrollTrigger);
+
+            const climbRope = document.getElementById('climbRope');
+            const toon = document.getElementById('toon');
             const navElement = document.querySelector('nav');
-            const navHeight = navElement ? navElement.offsetHeight : 64;
+            const navHeight = navElement ? navElement.offsetHeight : 64; // Default nav height if element not found
 
-            const updateAvatarPosition = () => {
-                const scrollY = window.scrollY;
-                const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+            // Initial positioning of the rope and avatar below the navbar
+            // These elements are fixed, so their 'top' property sets their initial vertical offset
+            const initialTopOffset = navHeight + 10; // 10px buffer below the nav
+            document.querySelector('.rope-visual-gsap').style.top = `${initialTopOffset}px`;
+            climbRope.style.top = `${initialTopOffset}px`;
 
-                let translateYValue = 0;
-                if (documentHeight > 0) {
-                    // Calculate avatar's top position relative to the viewport.
-                    // It should move from just below the navbar to the bottom of the viewport.
-                    const maxAvatarTravel = window.innerHeight - climbingAvatar.offsetHeight - navHeight - 10; // 10px buffer from bottom
-                    translateYValue = (scrollY / documentHeight) * maxAvatarTravel;
-                    translateYValue = Math.min(Math.max(0, translateYValue), maxAvatarTravel); // Clamp values
+
+            gsap.to(climbRope, {
+                scrollTrigger: {
+                    trigger: "body",
+                    start: "top top", // When the top of the body hits the top of the viewport
+                    end: "bottom bottom", // When the bottom of the body hits the bottom of the viewport
+                    scrub: 1, // Smoothly scrubs the animation with scroll
+                },
+                // Animate 'y' (transformY) to make the avatar move down the entire scrollable height
+                // The amount to travel is the total scrollable height of the document
+                y: () => document.documentElement.scrollHeight - window.innerHeight - initialTopOffset - (climbRope.offsetHeight),
+                // Subtract initialTopOffset because the 'y' is relative to its starting 'top'
+                // and subtract climbRope.offsetHeight to ensure it ends at the bottom edge of the viewport
+            });
+
+            // Subtle rotation for the 'climbing' effect
+            ScrollTrigger.create({
+                trigger: "body",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: true,
+                onUpdate: self => {
+                    const progress = self.progress;
+                    // Apply a sine wave rotation for a subtle swinging/climbing motion
+                    toon.style.transform = `rotate(${Math.sin(progress * 15) * 4}deg)`; // Increased frequency and amplitude slightly
                 }
+            });
 
-                // Set the 'top' style directly to the avatar element for smooth movement along the rope
-                climbingAvatar.style.top = `${navHeight + 10 + translateYValue}px`; // Start 10px below nav, then move down
-            };
-
-            updateAvatarPosition(); // Initial position
-            window.addEventListener('scroll', updateAvatarPosition);
-            window.addEventListener('resize', updateAvatarPosition);
 
             // Dark Mode Toggle Logic
             const darkModeToggle = document.getElementById('darkModeToggle');
