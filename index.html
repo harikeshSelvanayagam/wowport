@@ -11,7 +11,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
+            background-color: #f8fafc; /* Light blue-grey */
             color: #334155; /* Slate */
             overflow-x: hidden; /* Prevent horizontal scroll due to avatar */
         }
@@ -50,6 +50,10 @@
             height: 7rem; /* Adjusted height for your avatar */
             width: auto; /* Maintain aspect ratio */
             transform-origin: center center; /* Ensure rotation is from the center */
+        }
+        /* New class to stop the bobbing animation when avatar "lands" */
+        #running-avatar.landed {
+            animation: none;
         }
 
         /* Responsive adjustments for avatar size */
@@ -202,43 +206,53 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const avatarContainer = document.getElementById('avatar-container');
-            const avatarImage = document.getElementById('running-avatar'); // Get the image element itself
+            const avatarImage = document.getElementById('running-avatar');
 
             // Function to update avatar position and rotation based on scroll
             const updateAvatarPosition = () => {
                 const scrollY = window.scrollY;
-                const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const documentHeight = document.documentElement.scrollHeight - window.innerHeight; // Total scrollable height
 
-                if (documentHeight === 0) {
-                    avatarContainer.style.transform = `translateY(0px) rotateZ(0deg)`; // Reset if no scroll
+                if (documentHeight <= 0) { // Handle cases where there's no scroll or minimal content
+                    avatarContainer.style.transform = `translateY(0px) rotateZ(0deg)`;
+                    avatarImage.classList.remove('landed'); // Ensure not landed
                     return;
                 }
 
-                const scrollProgress = Math.min(1, Math.max(0, scrollY / documentHeight));
+                // Calculate scroll progress (0 to 1)
+                const scrollProgress = scrollY / documentHeight;
 
                 // Calculate max movement for the avatar from top of viewport to bottom of viewport
-                // Accounting for the avatar container's padding (pt-4, pl-4)
-                // offsetHeight includes padding and border
+                // offsetHeight includes padding and border. We subtract a small buffer (10px)
+                // from the bottom edge for visual appeal, preventing it from touching the very edge.
                 const avatarContainerHeight = avatarContainer.offsetHeight;
-                const maxTranslateY = window.innerHeight - avatarContainerHeight;
+                const maxTranslateY = window.innerHeight - avatarContainerHeight - 10;
 
                 let translateYValue = scrollProgress * maxTranslateY;
                 let rotateValue = '0deg';
 
-                // Apply rotation when scrolled to the very bottom (or very close)
-                // Using a small threshold (e.g., 0.98 for 98% scrolled)
-                if (scrollProgress > 0.98) {
-                    rotateValue = '90deg';
+                // Define a threshold for "at the bottom" to trigger rotation and landing.
+                // Using scrollY compared to documentHeight-5 means it triggers when only 5px or less
+                // of content remains to be scrolled, ensuring it's at the very end.
+                const isAtBottom = (scrollY >= documentHeight - 5);
+
+                if (isAtBottom) {
+                    translateYValue = maxTranslateY; // Ensure it's exactly at the calculated bottom position
+                    rotateValue = '90deg'; // Rotate 90 degrees
+                    avatarImage.classList.add('landed'); // Add class to stop the bobbing animation
+                } else {
+                    avatarImage.classList.remove('landed'); // Remove class if not at the bottom
                 }
 
-                // Apply both translation and rotation
+                // Apply both translation and rotation to the avatar container
                 avatarContainer.style.transform = `translateY(${translateYValue}px) rotateZ(${rotateValue})`;
             };
 
-            // Call the function initially and add event listeners
+            // Call the function initially to set the avatar's position on page load
             updateAvatarPosition();
+            // Add event listeners for scroll and window resize to update the avatar's position dynamically
             window.addEventListener('scroll', updateAvatarPosition);
-            window.addEventListener('resize', updateAvatarPosition); // Update on resize too
+            window.addEventListener('resize', updateAvatarPosition);
         });
     </script>
 </body>
