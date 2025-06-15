@@ -1,258 +1,638 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Stunning Portfolio</title>
+    <title>Harikesh - AI & Fullstack Developer</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts - Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts - Poppins (headings) & JetBrains Mono (code/details) -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts - Dancing Script for stylish name -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN for sleek icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+        /* Bright Mode Variables */
+        :root {
+            --site-bg: #ffffff; /* Pure white background for bright mode */
+            --site-text: #0a0a0a; /* Very dark grey / near black text for bright mode */
+            --card-bg: #ffffff;
+            --card-border: transparent; /* Make card border transparent in bright mode */
+            --skill-bg-blue: #eff6ff; /* blue-50 */
+            --skill-border-blue: #bfdbfe; /* blue-200 */
+            --skill-bg-green: #ecfdf5; /* green-50 */
+            --skill-border-green: #a7f3d0; /* green-200 */
+            --skill-bg-purple: #f3e8ff; /* purple-50 */
+            --skill-border-purple: #d8b4fe; /* purple-200 */
+            --section-bg-odd: #f8fafc; /* Very light grey for alternate sections */
+            /* Hero/Contact gradient for bright mode (original vibrant) */
+            --hero-contact-gradient-start: #1d4ed8; /* Blue-700 */
+            --hero-contact-gradient-mid: #4f46e5;   /* Indigo-600 */
+            --hero-contact-gradient-end: #8b5cf6;   /* Violet-500 */
+        }
+
+        /* Dark Mode Variables */
+        .dark {
+            --site-bg: #0a0a0a; /* Deep black background for dark mode */
+            --site-text: #f0f4f8; /* Off-white text for dark mode */
+            --card-bg: #1c1c1c; /* Slightly lighter black for cards */
+            --card-border: #333333; /* Dark grey border for dark mode */
+            --skill-bg-blue: #1e3a8a; /* dark blue */
+            --skill-border-blue: #1c3266;
+            --skill-bg-green: #065f46; /* dark green */
+            --skill-border-green: #054f39;
+            --skill-bg-purple: #5b21b6; /* dark purple */
+            --skill-border-purple: #4c1d95;
+            --section-bg-odd: #121212; /* Darker grey for alternate sections */
+            /* Hero/Contact gradient for dark mode (subtle dark shades) */
+            --hero-contact-gradient-start: #10002b; /* Very dark purple */
+            --hero-contact-gradient-mid: #2d004e;   /* Darker purple */
+            --hero-contact-gradient-end: #4a006c;   /* Even darker purple */
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Light blue-grey */
-            color: #334155; /* Slate */
-            overflow-x: hidden; /* Prevent horizontal scroll due to avatar */
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--site-bg);
+            color: var(--site-text);
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-        .section {
-            padding: 8rem 0;
-            min-height: 100vh; /* Ensure sections are tall enough for scroll effect */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            text-align: center;
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
         }
-        .section:nth-child(even) {
-            background-color: #e2e8f0; /* Lighter grey for even sections */
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
         }
+        .stylish-name-font {
+            font-family: 'Dancing Script', cursive; /* Apply stylish font */
+        }
+
+        /* Card styling, with border controlled by CSS variable */
         .card {
-            background-color: white;
-            border-radius: 1.5rem; /* Rounded corners */
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            padding: 2.5rem;
-            margin: 1.5rem;
-            max-width: 90%;
-            width: 100%; /* Make card take full width up to max-width */
-            transition: all 0.3s ease-in-out; /* Smooth transition for hover effects */
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border); /* Apply border based on variable */
+            transition: background-color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
         }
-        /* Keyframes for the subtle bobbing animation of the avatar */
-        @keyframes bob {
-            0% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(2deg); } /* Subtle up and tilt */
-            100% { transform: translateY(0) rotate(0deg); }
+        .skill-card-blue {
+            background-color: var(--skill-bg-blue);
+            border-color: var(--skill-border-blue);
         }
-        #running-avatar {
-            animation: bob 0.8s infinite ease-in-out; /* Apply bobbing animation */
-            transition: transform 0.2s linear; /* Smooth vertical movement and rotation */
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)); /* Add shadow to avatar */
-            height: 7rem; /* Adjusted height for your avatar */
-            width: auto; /* Maintain aspect ratio */
-            transform-origin: center center; /* Ensure rotation is from the center */
+        .skill-card-green {
+            background-color: var(--skill-bg-green);
+            border-color: var(--skill-border-green);
         }
-        /* New class to stop the bobbing animation when avatar "lands" */
-        #running-avatar.landed {
-            animation: none;
+        .skill-card-purple {
+            background-color: var(--skill-bg-purple);
+            border-color: var(--skill-border-purple);
         }
 
-        /* Responsive adjustments for avatar size */
-        @media (min-width: 768px) { /* md breakpoint */
-            #running-avatar {
-                height: 8rem; /* Slightly larger on medium screens */
-            }
+        /* Alternate section background for better contrast */
+        .section:nth-of-type(even) { /* Affects About, Projects, Blog */
+            background-color: var(--section-bg-odd);
         }
 
-        @media (min-width: 1024px) { /* lg breakpoint */
-            #running-avatar {
-                height: 9rem; /* Even larger on large screens */
-            }
+        /* Custom Styles for animated gradient background for Hero and Contact */
+        .hero-gradient-bg {
+            background: linear-gradient(-45deg, var(--hero-contact-gradient-start), var(--hero-contact-gradient-mid), var(--hero-contact-gradient-end));
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
         }
-
-        /* Creative modifications */
-        .card:hover {
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08); /* More pronounced shadow */
-            transform: translateY(-5px) scale(1.02); /* Lift and slight scale */
-        }
-        .hero-title-glow {
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.7), 0 0 30px rgba(255, 255, 255, 0.4); /* White glow */
-        }
-        /* Subtle background animation for hero section */
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-        .animated-gradient {
-            background-size: 200% 200%;
-            animation: gradientShift 10s ease infinite;
+
+        /* Button glowing effect */
+        .btn-glow {
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
         }
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.4) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            transform: scale(0);
+        }
+        .btn-glow:hover::before {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Avatar climbing animation */
+        @keyframes climb-bob {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(2deg); } /* Subtle up and tilt */
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        #climbing-avatar {
+            animation: climb-bob 0.8s infinite ease-in-out; /* Apply bobbing animation */
+            transition: transform 0.05s linear; /* Smooth vertical movement with scroll */
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)); /* Add shadow to avatar */
+            height: 5rem; /* Consistent size */
+            width: auto; /* Maintain aspect ratio */
+            transform-origin: center center; /* Ensure rotation is from the center */
+        }
+
+        /* Rope styles */
+        #rope-container {
+            position: fixed;
+            top: 0;
+            left: 2rem; /* Position the rope on the left */
+            width: 1rem; /* Width of the rope itself */
+            height: 100vh;
+            z-index: 49; /* Below navbar, above content */
+            pointer-events: none; /* Allows clicks to pass through */
+        }
+
+        .rope-visual {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px; /* Thin line for the rope */
+            height: 100%;
+            background: linear-gradient(to bottom, #7a5230, #a07a5f, #7a5230); /* Rope texture */
+            border-radius: 2px;
+            box-shadow: inset 0 0 3px rgba(0,0,0,0.3);
+        }
+
+        /* Specific text color adjustments for dark mode */
+        /* These ensure vibrant text colors against the dark background */
+        .dark .text-gray-900,
+        .dark .text-gray-700,
+        .dark .text-gray-600,
+        .dark .text-gray-200,
+        .dark .text-gray-300 {
+            color: var(--site-text); /* Use general site text for paragraphs and generic text */
+        }
+
+        .dark .text-blue-700 { /* Skill heading 1 */
+            color: #4dc0b5; /* Teal for a neon effect */
+        }
+        .dark .text-green-700 { /* Skill heading 2 */
+            color: #a0aec0; /* Light gray-blue for contrast */
+        }
+        .dark .text-purple-700 { /* Skill heading 3 */
+            color: #f6ad55; /* Orange for a warm glow */
+        }
+        .dark .text-indigo-700 { /* Main headings */
+            color: #667eea; /* Lighter indigo for a subtle glow */
+        }
+        .dark .text-blue-800 { /* Project titles */
+            color: #63b3ed; /* Sky blue for a clean look */
+        }
+        .dark .text-indigo-600 { /* Links and call to actions */
+            color: #9f7aea; /* Purple for consistency */
+        }
+
+        /* Badge colors in dark mode */
+        .dark .bg-blue-100 { background-color: #3182ce; }
+        .dark .text-blue-800 { color: #e0f2f7; }
+        .dark .bg-green-100 { background-color: #38a169; }
+        .dark .text-green-800 { color: #e6fffa; }
+        .dark .bg-purple-100 { background-color: #805ad5; } /* New dark purple badge */
+        .dark .text-purple-800 { color: #ede9fe; } /* New dark purple badge text */
     </style>
 </head>
-<body>
+<body class="text-gray-800">
 
-    <!-- Avatar Container - Now runs from top to bottom -->
-    <div id="avatar-container" class="fixed top-0 left-0 z-50 pt-4 pl-4">
-        <!-- Your actual avatar image, assuming you saved it as avatar.png in the 'images' folder -->
-        <img id="running-avatar" src="images/avatar.png" alt="Your AI Avatar Toon Climbing">
+    <!-- Rope Container and Climbing Avatar -->
+    <div id="rope-container">
+        <div class="rope-visual"></div>
+        <img id="climbing-avatar" src="images/avatar.png" alt="AI Companion Avatar Climbing"
+             class="absolute left-1/2 -translate-x-1/2" style="top: 0;"
+             onerror="this.onerror=null;this.src='https://placehold.co/80x80/6366f1/ffffff?text=AI';">
     </div>
 
-    <!-- Hero Section with Profile Picture -->
-    <section id="hero" class="section bg-gradient-to-r from-blue-500 to-indigo-600 text-white animated-gradient">
-        <div class="max-w-6xl w-full px-6 flex flex-col md:flex-row items-center justify-around space-y-8 md:space-y-0 md:space-x-8">
+    <!-- Navbar -->
+    <nav class="fixed w-full z-40 bg-white bg-opacity-95 shadow-lg py-4 px-6 md:px-12 flex justify-between items-center rounded-b-lg dark:bg-black dark:bg-opacity-95 dark:shadow-xl">
+        <div class="text-2xl font-bold text-indigo-700 dark:text-indigo-400 stylish-name-font">Harikesh</div>
+        <div class="hidden md:flex space-x-8 items-center">
+            <a href="#hero" class="text-gray-600 hover:text-indigo-700 font-semibold transition duration-300 dark:text-gray-300 dark:hover:text-indigo-400">Home</a>
+            <a href="#about" class="text-gray-600 hover:text-indigo-700 font-semibold transition duration-300 dark:text-gray-300 dark:hover:text-indigo-400">About</a>
+            <a href="#skills" class="text-gray-600 hover:text-indigo-700 font-semibold transition duration-300 dark:text-gray-300 dark:hover:text-indigo-400">Skills</a>
+            <a href="#projects" class="text-gray-600 hover:text-indigo-700 font-semibold transition duration-300 dark:text-gray-300 dark:hover:text-indigo-400">Projects</a>
+            <a href="#blog" class="text-gray-600 hover:text-indigo-700 font-semibold transition duration-300 dark:text-gray-300 dark:hover:text-indigo-400">Blog</a>
+            <a href="#contact" class="text-gray-600 hover:text-indigo-700 font-semibold transition duration-300 dark:text-gray-300 dark:hover:text-indigo-400">Contact</a>
+            <!-- Dark Mode Toggle -->
+            <button id="darkModeToggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300">
+                <i data-lucide="moon" class="w-5 h-5" id="darkModeIcon"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-button" class="md:hidden text-gray-600 dark:text-gray-300 focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
+    <div id="mobile-menu" class="fixed top-0 right-0 w-64 h-full bg-white shadow-xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out md:hidden dark:bg-black dark:shadow-2xl">
+        <div class="flex justify-end p-4">
+            <button id="close-mobile-menu" class="text-gray-600 dark:text-gray-300 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <nav class="flex flex-col p-4 space-y-4">
+            <a href="#hero" class="text-gray-700 hover:text-indigo-700 font-semibold text-lg py-2 transition duration-300 dark:text-gray-200 dark:hover:text-indigo-400" onclick="hideMobileMenu()">Home</a>
+            <a href="#about" class="text-gray-700 hover:text-indigo-700 font-semibold text-lg py-2 transition duration-300 dark:text-gray-200 dark:hover:text-indigo-400" onclick="hideMobileMenu()">About</a>
+            <a href="#skills" class="text-gray-700 hover:text-indigo-700 font-semibold text-lg py-2 transition duration-300 dark:text-gray-200 dark:hover:text-indigo-400" onclick="hideMobileMenu()">Skills</a>
+            <a href="#projects" class="text-gray-700 hover:text-indigo-700 font-semibold text-lg py-2 transition duration-300 dark:text-gray-200 dark:hover:text-indigo-400" onclick="hideMobileMenu()">Projects</a>
+            <a href="#blog" class="text-gray-700 hover:text-indigo-700 font-semibold text-lg py-2 transition duration-300 dark:text-gray-200 dark:hover:text-indigo-400" onclick="hideMobileMenu()">Blog</a>
+            <a href="#contact" class="text-gray-700 hover:text-indigo-700 font-semibold text-lg py-2 transition duration-300 dark:text-gray-200 dark:hover:text-indigo-400" onclick="hideMobileMenu()">Contact</a>
+            <button id="darkModeToggleMobile" class="p-2 mt-4 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 flex items-center justify-center">
+                <i data-lucide="moon" class="w-5 h-5 mr-2" id="darkModeIconMobile"></i> Dark Mode
+            </button>
+        </nav>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative section hero-gradient-bg min-h-screen flex items-center justify-center text-white pt-20 pb-10 md:pt-0 md:pb-0">
+        <div class="container mx-auto px-6 text-center md:text-left flex flex-col md:flex-row items-center justify-between">
             <!-- Left Half: Text Content -->
-            <div class="md:w-1/2 text-center md:text-left">
-                <h1 class="text-5xl md:text-7xl font-extrabold mb-6 animate-pulse hero-title-glow">Hi, I'm [Your Name]</h1>
-                <p class="text-xl md:text-2xl mb-8">A passionate [Your Profession/Field] dedicated to creating impactful solutions.</p>
-                <a href="#about" class="bg-white text-blue-600 px-8 py-3 rounded-full text-lg font-semibold hover:bg-blue-100 transition duration-300 transform hover:scale-105">Learn More</a>
+            <div class="md:w-1/2 flex flex-col items-center md:items-start mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 leading-tight stylish-name-font">
+                    Hi, I'm Harikesh
+                </h1>
+                <p id="typewriter-text" class="text-lg md:text-xl lg:text-2xl mb-8 font-light code-font"></p>
+                <a href="#about" class="bg-white text-indigo-700 px-8 py-3 rounded-full text-lg font-semibold hover:bg-indigo-100 transition duration-300 transform hover:scale-105 shadow-lg btn-glow">
+                    Learn More <i data-lucide="arrow-right" class="inline-block ml-2 w-5 h-5"></i>
+                </a>
             </div>
             <!-- Right Half: Profile Picture -->
             <div class="md:w-1/2 flex justify-center items-center">
-                <!-- Profile picture, assuming you saved it as profile.png in the 'images' folder -->
-                <img src="images/profile.png" alt="Your Profile Picture" class="w-64 h-64 md:w-80 md:h-80 rounded-full object-cover shadow-2xl transform transition duration-500 hover:scale-105 hover:rotate-3">
+                <img src="images/profile.png" alt="Your Profile Picture"
+                     class="w-64 h-64 md:w-80 md:h-80 rounded-full object-cover shadow-2xl transform transition duration-500 hover:scale-105 hover:rotate-3 border-4 border-indigo-300"
+                     onerror="this.onerror=null;this.src='https://placehold.co/320x320/a78bfa/ffffff?text=Your+Profile';">
             </div>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="section">
-        <div class="card w-full md:w-3/4 lg:w-2/3">
-            <h2 class="text-4xl font-bold mb-6 text-gray-800">About Me</h2>
-            <p class="text-lg leading-relaxed text-gray-700">
-                I am a highly motivated [Your Profession/Role] with [Number] years of experience in [Your Industry/Area].
-                My expertise lies in [Key Skill 1], [Key Skill 2], and [Key Skill 3]. I thrive in dynamic environments and
-                am always eager to learn and adapt to new technologies and challenges. In my free time, I enjoy [Hobby 1]
-                and [Hobby 2].
-                <br><br>
-                [Add more details about your journey, passions, or a brief anecdote here.]
-            </p>
+    <section id="about" class="section py-16 px-6">
+        <div class="container mx-auto card w-full max-w-4xl">
+            <h2 class="text-4xl font-bold mb-10 text-center text-indigo-700">About Me</h2>
+            <div class="relative pl-12 md:pl-20 py-4">
+                <!-- Vertical timeline line -->
+                <div class="absolute left-4 md:left-8 top-0 bottom-0 w-1 bg-indigo-200 dark:bg-indigo-700 rounded-full"></div>
+
+                <!-- Timeline Item 1 -->
+                <div class="mb-10 relative">
+                    <div class="absolute -left-3 md:-left-7 top-1 w-6 h-6 bg-indigo-500 rounded-full flex items-center justify-center text-white shadow-md">
+                        <i data-lucide="award" class="w-4 h-4"></i>
+                    </div>
+                    <div class="ml-6">
+                        <h3 class="text-2xl font-semibold mb-2 text-gray-900">Passionate AI & Fullstack Developer</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            With [Number] years of experience, I specialize in crafting intelligent and robust software solutions.
+                            My journey began with a fascination for [mention early influence or core interest], leading me to explore
+                            the intricate world of AI and web development.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 2 -->
+                <div class="mb-10 relative">
+                    <div class="absolute -left-3 md:-left-7 top-1 w-6 h-6 bg-indigo-500 rounded-full flex items-center justify-center text-white shadow-md">
+                        <i data-lucide="activity" class="w-4 h-4"></i>
+                    </div>
+                    <div class="ml-6">
+                        <h3 class="text-2xl font-semibold mb-2 text-gray-900">Expertise & Innovation</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            My core strengths lie in [Key Skill 1], [Key Skill 2], and [Key Skill 3], constantly pushing the boundaries
+                            of what's possible. I thrive on challenging projects that demand creative problem-solving and a deep
+                            understanding of cutting-edge technologies.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 3 -->
+                <div class="mb-10 relative">
+                    <div class="absolute -left-3 md:-left-7 top-1 w-6 h-6 bg-indigo-500 rounded-full flex items-center justify-center text-white shadow-md">
+                        <i data-lucide="book-open" class="w-4 h-4"></i>
+                    </div>
+                    <div class="ml-6">
+                        <h3 class="text-2xl font-semibold mb-2 text-gray-900">Beyond the Code</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            When I'm not immersed in code, you'll find me [Hobby 1] or [Hobby 2], constantly learning and growing.
+                            I believe in continuous improvement, both professionally and personally.
+                        </p>
+                    </div>
+                </div>
+                <!-- Add more timeline items as needed -->
+            </div>
         </div>
     </section>
 
     <!-- Skills Section -->
-    <section id="skills" class="section">
-        <div class="card w-full md:w-3/4 lg:w-2/3">
-            <h2 class="text-4xl font-bold mb-6 text-gray-800">My Skills</h2>
+    <section id="skills" class="section py-16 px-6">
+        <div class="container mx-auto card w-full max-w-4xl">
+            <h2 class="text-4xl font-bold mb-10 text-center text-indigo-700">My Skillset</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="p-6 bg-blue-50 rounded-xl shadow-inner transform hover:scale-105 transition duration-300">
-                    <h3 class="text-2xl font-semibold mb-3 text-blue-700">Web Development</h3>
-                    <ul class="list-disc list-inside text-left text-gray-600">
-                        <li>HTML5, CSS3, JavaScript</li>
-                        <li>React, Vue.js, Angular</li>
-                        <li>Node.js, Express.js</li>
-                        <li>Tailwind CSS, Bootstrap</li>
-                        <!-- Add more web development skills -->
+                <div class="p-6 rounded-2xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer skill-card-blue border">
+                    <h3 class="text-2xl font-semibold mb-3 text-blue-700 flex items-center"><i data-lucide="brackets" class="w-6 h-6 mr-2"></i> Web Development</h3>
+                    <ul class="list-none space-y-2 text-left text-gray-700 code-font">
+                        <li><span class="text-indigo-500 dark:text-indigo-300">&bull;</span> HTML5, CSS3, JavaScript (ES6+)</li>
+                        <li><span class="text-indigo-500 dark:text-indigo-300">&bull;</span> React.js, Next.js, Vue.js</li>
+                        <li><span class="text-indigo-500 dark:text-indigo-300">&bull;</span> Node.js, Express.js, Python/Django</li>
+                        <li><span class="text-indigo-500 dark:text-indigo-300">&bull;</span> Tailwind CSS, Bootstrap, Styled Components</li>
                     </ul>
                 </div>
-                <div class="p-6 bg-green-50 rounded-xl shadow-inner transform hover:scale-105 transition duration-300">
-                    <h3 class="text-2xl font-semibold mb-3 text-green-700">Programming Languages</h3>
-                    <ul class="list-disc list-inside text-left text-gray-600">
-                        <li>Python</li>
-                        <li>Java</li>
-                        <li>C++</li>
-                        <li>Go</li>
-                        <!-- Add more programming languages -->
+                <div class="p-6 rounded-2xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer skill-card-green border">
+                    <h3 class="text-2xl font-semibold mb-3 text-green-700 flex items-center"><i data-lucide="database" class="w-6 h-6 mr-2"></i> Data & Backend</h3>
+                    <ul class="list-none space-y-2 text-left text-gray-700 code-font">
+                        <li><span class="text-indigo-500 dark:text-indigo-300">&bull;</span> SQL (PostgreSQL, MySQL), NoSQL (MongoDB, Firestore)</li>
+                        <li><span class="text-indigo-500 dark:text-indigo-300">&bull;</span> RESTful APIs, GraphQL</li>
+                        <li><span class="text-indigo-500 dark:text-indigo-300">&bull;</span> Docker, Kubernetes, CI/CD</li>
+                        <li><span class="text-indigo-500 dark:text-indigo-300">&bull;</span> AWS, Google Cloud Platform, Netlify</li>
                     </ul>
                 </div>
-                <div class="p-6 bg-purple-50 rounded-xl shadow-inner transform hover:scale-105 transition duration-300">
-                    <h3 class="text-2xl font-semibold mb-3 text-purple-700">Tools & Technologies</h3>
-                    <ul class="list-disc list-inside text-left text-gray-600">
-                        <li>Git, GitHub</li>
-                        <li>Docker, Kubernetes</li>
-                        <li>AWS, Google Cloud</li>
-                        <li>Database (SQL, NoSQL)</li>
-                        <!-- Add more tools and technologies -->
+                <div class="p-6 rounded-2xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer skill-card-purple border">
+                    <h3 class="text-2xl font-semibold mb-3 text-purple-700 flex items-center"><i data-lucide="brain" class="w-6 h-6 mr-2"></i> AI & Machine Learning</h3>
+                    <ul class="list-none space-y-2 text-left text-gray-700 code-font">
+                        <li><span class="text-indigo-500 dark:text-indigo-300">&bull;</span> Python (TensorFlow, PyTorch, scikit-learn)</li>
+                        <li><span class="text-indigo-500 dark:text-indigo-300">&bull;</span> Natural Language Processing (NLP)</li>
+                        <li><span class="text-indigo-500 dark:text-indigo-300">&bull;</span> Computer Vision, Generative AI</li>
+                        <li><span class="text-indigo-500 dark:text-indigo-300">&bull;</span> Data Analysis & Visualization (Pandas, Matplotlib)</li>
                     </ul>
                 </div>
-                <!-- Add more skill categories if needed, following the same structure -->
             </div>
         </div>
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="section">
-        <div class="card w-full md:w-3/4 lg:w-2/3">
-            <h2 class="text-4xl font-bold mb-6 text-gray-800">My Projects</h2>
+    <section id="projects" class="section py-16 px-6">
+        <div class="container mx-auto card w-full max-w-4xl">
+            <h2 class="text-4xl font-bold mb-10 text-center text-indigo-700">My Notable Projects</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Project 1 Placeholder -->
-                <div class="bg-gray-50 p-6 rounded-xl shadow-md text-left transform hover:scale-105 transition duration-300">
-                    <h3 class="text-2xl font-semibold mb-2 text-blue-800">Project Title 1</h3>
-                    <p class="text-gray-700 mb-4">A brief description of Project 1, highlighting its purpose, technologies used, and your role.</p>
-                    <a href="[Link to Project 1]" class="text-blue-600 hover:underline font-medium" target="_blank" rel="noopener noreferrer">View Project &rarr;</a>
+                <!-- Project Card 1 -->
+                <div class="bg-white p-6 rounded-2xl shadow-xl border dark:bg-gray-800 transform hover:scale-102 transition duration-300 group">
+                    <img src="https://placehold.co/400x250/cbd5e1/334155?text=Project+Thumbnail+1" alt="Project Thumbnail 1"
+                         class="rounded-lg mb-4 w-full h-48 object-cover border border-gray-100 dark:border-gray-500"
+                         onerror="this.onerror=null;this.src='https://placehold.co/400x250/cbd5e1/334155?text=Project+Thumbnail+1';">
+                    <h3 class="text-2xl font-semibold mb-2 text-gray-900">Intelligent Chatbot Assistant</h3>
+                    <p class="text-gray-700 mb-4 text-justify">Developed a conversational AI chatbot leveraging natural language processing to provide personalized customer support and answer complex queries efficiently.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full code-font">Python</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full code-font">TensorFlow</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full code-font">Flask</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full code-font">NLP</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <a href="#" class="text-indigo-600 hover:underline font-medium flex items-center group-hover:text-indigo-800 transition duration-300">
+                            View Demo <i data-lucide="external-link" class="w-4 h-4 ml-1"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 hover:text-gray-900 flex items-center transition duration-300">
+                            <i data-lucide="github" class="w-5 h-5 mr-1"></i> GitHub
+                        </a>
+                    </div>
                 </div>
-                <!-- Project 2 Placeholder -->
-                <div class="bg-gray-50 p-6 rounded-xl shadow-md text-left transform hover:scale-105 transition duration-300">
-                    <h3 class="text-2xl font-semibold mb-2 text-blue-800">Project Title 2</h3>
-                    <p class="text-gray-700 mb-4">A brief description of Project 2, highlighting its purpose, technologies used, and your role.</p>
-                    <a href="[Link to Project 2]" class="text-blue-600 hover:underline font-medium" target="_blank" rel="noopener noreferrer">View Project &rarr;</a>
+
+                <!-- Project Card 2 -->
+                <div class="bg-white p-6 rounded-2xl shadow-xl border dark:bg-gray-800 transform hover:scale-102 transition duration-300 group">
+                    <img src="https://placehold.co/400x250/cbd5e1/334155?text=Project+Thumbnail+2" alt="Project Thumbnail 2"
+                         class="rounded-lg mb-4 w-full h-48 object-cover border border-gray-100 dark:border-gray-500"
+                         onerror="this.onerror=null;this.src='https://placehold.co/400x250/cbd5e1/334155?text=Project+Thumbnail+2';">
+                    <h3 class="text-2xl font-semibold mb-2 text-gray-900">E-commerce Microservices Platform</h3>
+                    <p class="text-gray-700 mb-4 text-justify">Engineered a scalable e-commerce backend using microservices architecture, implementing secure payment gateways, user authentication, and inventory management.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full code-font">Node.js</span>
+                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full code-font">Express</span>
+                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full code-font">MongoDB</span>
+                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full code-font">Docker</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <a href="#" class="text-indigo-600 hover:underline font-medium flex items-center group-hover:text-indigo-800 transition duration-300">
+                            View Demo <i data-lucide="external-link" class="w-4 h-4 ml-1"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 hover:text-gray-900 flex items-center transition duration-300">
+                            <i data-lucide="github" class="w-5 h-5 mr-1"></i> GitHub
+                        </a>
+                    </div>
                 </div>
-                <!-- Add more project blocks as needed, following the same structure -->
+                <!-- Add more project blocks here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog/Insights Section -->
+    <section id="blog" class="section py-16 px-6">
+        <div class="container mx-auto card w-full max-w-4xl">
+            <h2 class="text-4xl font-bold mb-10 text-center text-indigo-700">My Insights & Dev Logs</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Blog Post 1 -->
+                <div class="bg-gray-50 p-6 rounded-2xl shadow-lg border border-gray-100 dark:bg-gray-800 transform hover:scale-102 transition duration-300">
+                    <h3 class="text-2xl font-semibold mb-2 text-gray-900">Optimizing ML Models with Quantization</h3>
+                    <p class="text-gray-700 mb-4 text-justify text-sm">A deep dive into techniques for reducing model size and improving inference speed for deployment on edge devices.</p>
+                    <a href="#" class="text-indigo-600 hover:underline font-medium flex items-center">
+                        Read More <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+                <!-- Blog Post 2 -->
+                <div class="bg-gray-50 p-6 rounded-2xl shadow-lg border border-gray-100 dark:bg-gray-800 transform hover:scale-102 transition duration-300">
+                    <h3 class="text-2xl font-semibold mb-2 text-gray-900">Building Responsive UIs with Tailwind CSS</h3>
+                    <p class="text-gray-700 mb-4 text-justify text-sm">My journey and best practices for creating flexible and beautiful user interfaces efficiently using Tailwind's utility-first approach.</p>
+                    <a href="#" class="text-indigo-600 hover:underline font-medium flex items-center">
+                        Read More <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+                <!-- Add more blog posts as needed -->
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="section bg-gradient-to-r from-teal-500 to-green-600 text-white">
-        <div class="max-w-xl px-6">
+    <section id="contact" class="section py-16 px-6 hero-gradient-bg text-white">
+        <div class="container mx-auto max-w-2xl text-center">
             <h2 class="text-4xl md:text-5xl font-bold mb-6">Get In Touch</h2>
-            <p class="text-lg md:text-xl mb-8">Have a question or want to work together? Feel free to reach out!</p>
-            <a href="mailto:[your.email@example.com]" class="bg-white text-teal-600 px-8 py-3 rounded-full text-lg font-semibold hover:bg-teal-100 transition duration-300 transform hover:scale-105">Email Me</a>
-            <div class="mt-8 text-sm text-gray-200">
-                &copy; 2025 [Your Name]. All rights reserved.
+            <p class="text-lg md:text-xl mb-8 font-light">Have a question, a project idea, or just want to chat? I'm always open to new connections!</p>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4">
+                <a href="mailto:your.email@example.com" class="bg-white text-indigo-700 px-8 py-3 rounded-full text-lg font-semibold hover:bg-indigo-100 transition duration-300 transform hover:scale-105 shadow-lg btn-glow">
+                    <i data-lucide="mail" class="w-5 h-5 mr-2"></i> Email Me
+                </a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="bg-white text-indigo-700 px-8 py-3 rounded-full text-lg font-semibold hover:bg-indigo-100 transition duration-300 transform hover:scale-105 shadow-lg btn-glow">
+                    <i data-lucide="file-text" class="w-5 h-5 mr-2"></i> View Resume
+                </a>
+            </div>
+            <div class="mt-12 text-sm text-gray-200">
+                &copy; 2025 Harikesh. All rights reserved. Designed with <span class="text-red-400">&hearts;</span> by AI.
             </div>
         </div>
     </section>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const avatarContainer = document.getElementById('avatar-container');
-            const avatarImage = document.getElementById('running-avatar');
+        // Initialize Lucide icons
+        lucide.createIcons();
 
-            // Function to update avatar position and rotation based on scroll
+        // Typewriter Effect for Hero Tagline
+        const typewriterText = document.getElementById('typewriter-text');
+        const phrases = [
+            "Engineering AI That Matters.",
+            "Crafting Intelligent Web Solutions.",
+            "Innovating at the Intersection of AI & Web.",
+            "From Circuits to Code: My Digital Journey."
+        ];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function typeWriter() {
+            const currentPhrase = phrases[phraseIndex];
+            if (isDeleting) {
+                typewriterText.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typewriterText.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                setTimeout(() => isDeleting = true, 1500); // Pause at end of typing
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+            }
+
+            const typingSpeed = isDeleting ? 50 : 100;
+            setTimeout(typeWriter, typingSpeed);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            typeWriter(); // Start typewriter effect
+
+            // Climbing Avatar Vertical Movement with Scroll
+            const climbingAvatar = document.getElementById('climbing-avatar');
+            const navHeight = document.querySelector('nav').offsetHeight;
+
             const updateAvatarPosition = () => {
                 const scrollY = window.scrollY;
-                const documentHeight = document.documentElement.scrollHeight - window.innerHeight; // Total scrollable height
+                const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
 
-                if (documentHeight <= 0) { // Handle cases where there's no scroll or minimal content
-                    avatarContainer.style.transform = `translateY(0px) rotateZ(0deg)`;
-                    avatarImage.classList.remove('landed'); // Ensure not landed
-                    return;
+                let translateYValue = 0;
+                if (documentHeight > 0) {
+                    // Calculate avatar's top position relative to the viewport.
+                    // It should move from just below the navbar to the bottom of the viewport.
+                    const maxAvatarTravel = window.innerHeight - climbingAvatar.offsetHeight - navHeight - 10; // 10px buffer from bottom
+                    translateYValue = (scrollY / documentHeight) * maxAvatarTravel;
+                    translateYValue = Math.min(Math.max(0, translateYValue), maxAvatarTravel); // Clamp values
                 }
 
-                // Calculate scroll progress (0 to 1)
-                const scrollProgress = scrollY / documentHeight;
-
-                // Calculate max movement for the avatar from top of viewport to bottom of viewport
-                // offsetHeight includes padding and border. We subtract a small buffer (10px)
-                // from the bottom edge for visual appeal, preventing it from touching the very edge.
-                const avatarContainerHeight = avatarContainer.offsetHeight;
-                const maxTranslateY = window.innerHeight - avatarContainerHeight - 10;
-
-                let translateYValue = scrollProgress * maxTranslateY;
-                let rotateValue = '0deg';
-
-                // Define a threshold for "at the bottom" to trigger rotation and landing.
-                // Using scrollY compared to documentHeight-5 means it triggers when only 5px or less
-                // of content remains to be scrolled, ensuring it's at the very end.
-                const isAtBottom = (scrollY >= documentHeight - 5);
-
-                if (isAtBottom) {
-                    translateYValue = maxTranslateY; // Ensure it's exactly at the calculated bottom position
-                    rotateValue = '90deg'; // Rotate 90 degrees
-                    avatarImage.classList.add('landed'); // Add class to stop the bobbing animation
-                } else {
-                    avatarImage.classList.remove('landed'); // Remove class if not at the bottom
-                }
-
-                // Apply both translation and rotation to the avatar container
-                avatarContainer.style.transform = `translateY(${translateYValue}px) rotateZ(${rotateValue})`;
+                climbingAvatar.style.top = `${navHeight + 10 + translateYValue}px`; // Start 10px below nav, then move down
             };
 
-            // Call the function initially to set the avatar's position on page load
-            updateAvatarPosition();
-            // Add event listeners for scroll and window resize to update the avatar's position dynamically
+            updateAvatarPosition(); // Initial position
             window.addEventListener('scroll', updateAvatarPosition);
             window.addEventListener('resize', updateAvatarPosition);
+
+            // Dark Mode Toggle Logic
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const darkModeToggleMobile = document.getElementById('darkModeToggleMobile');
+            const darkModeIcon = document.getElementById('darkModeIcon');
+            const darkModeIconMobile = document.getElementById('darkModeIconMobile');
+            const htmlElement = document.documentElement;
+
+            // Function to set theme
+            function setTheme(theme) {
+                if (theme === 'dark') {
+                    htmlElement.classList.add('dark');
+                    darkModeIcon.setAttribute('data-lucide', 'sun');
+                    darkModeIconMobile.setAttribute('data-lucide', 'sun');
+                } else {
+                    htmlElement.classList.remove('dark');
+                    darkModeIcon.setAttribute('data-lucide', 'moon');
+                    darkModeIconMobile.setAttribute('data-lucide', 'moon');
+                }
+                lucide.createIcons(); // Re-render icons after changing attribute
+            }
+
+            // Load saved theme from localStorage or detect system preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                setTheme('dark');
+            } else {
+                setTheme('light');
+            }
+
+            // Toggle theme on button click
+            darkModeToggle.addEventListener('click', () => {
+                if (htmlElement.classList.contains('dark')) {
+                    setTheme('light');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    setTheme('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+            darkModeToggleMobile.addEventListener('click', () => {
+                if (htmlElement.classList.contains('dark')) {
+                    setTheme('light');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    setTheme('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+                hideMobileMenu(); // Hide mobile menu after toggle
+            });
+
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const closeMobileMenu = document.getElementById('close-mobile-menu');
+            const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.remove('translate-x-full');
+                mobileMenuOverlay.classList.remove('hidden');
+            });
+
+            closeMobileMenu.addEventListener('click', () => {
+                hideMobileMenu();
+            });
+
+            mobileMenuOverlay.addEventListener('click', () => {
+                hideMobileMenu();
+            });
+
+            function hideMobileMenu() {
+                mobileMenu.classList.add('translate-x-full');
+                mobileMenuOverlay.classList.add('hidden');
+            }
+
+            // Smooth scroll for navigation links
+            document.querySelectorAll('nav a').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    // Only prevent default if it's an internal link
+                    if (this.getAttribute('href').startsWith('#')) {
+                        e.preventDefault();
+                        const targetId = this.getAttribute('href').substring(1);
+                        const targetElement = document.getElementById(targetId);
+                        if (targetElement) {
+                            // Adjust scroll position to account for fixed header
+                            const headerOffset = document.querySelector('nav').offsetHeight;
+                            const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
+                            const offsetPosition = elementPosition - headerOffset;
+
+                            window.scrollTo({
+                                top: offsetPosition,
+                                behavior: "smooth"
+                            });
+                        }
+                    }
+                });
+            });
+
         });
     </script>
 </body>
